@@ -7,8 +7,12 @@ import static org.junit.Assert.*;
 
 public class AppTest {
     @Test
-    public void leakIt() throws Exception {
-        Assert.assertEquals("count should be one", "{ 'count': '1' }", new App().leakIt());
+    public void size() throws Exception {
+        App app = new App();
+        for (int i = 0; i < 10; i++) {
+            app.leakIt("testname");
+        }
+        Assert.assertEquals("size should be 1", 1, app.size());
     }
 
 }

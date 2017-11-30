@@ -3,8 +3,8 @@ package com.redhat.eap;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -20,11 +20,16 @@ public class App {
     @GET
     @Path("/leakIt")
     @Produces(MediaType.APPLICATION_JSON)
-    public String leakIt() {
-        for (int i = 0; i < 10000; i++) {
-            leakingMap.put(new MyLeakingObject("aname"), UUID.randomUUID().toString());
-        }
-        return "{ 'count': '" + leakingMap.size() + "' }";
+    public String leakIt(@QueryParam("name") String name) {
+        String uuid = UUID.randomUUID().toString();
+        leakingMap.put(new MyLeakingObject(name), uuid);
+        return "{ 'name':'" + name + "', 'uuid':'" + uuid + "' }";
+    }
+
+    @GET
+    @Path("/size")
+    public int size() {
+        return leakingMap.size();
     }
 
     private class MyLeakingObject {
